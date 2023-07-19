@@ -7,7 +7,7 @@
         <v-toolbar-title dark>Soporte la perla</v-toolbar-title>
         <v-spacer></v-spacer>
   
-        <v-btn @click="salir()" class="white black--text" v-if="$store.state.token !== ''">
+        <v-btn @click="salir()" class="white black--text">
           salir
           <v-icon>mdi-door-open</v-icon>
         </v-btn>
@@ -40,19 +40,19 @@
           </v-list-item>
   
           <!-- //grupo holders -->
-          <v-list-item to="/holders" v-if="$store.state.datos.rol == 'ADMIN'">
+          <v-list-item to="/usuario" v-if="$store.state.datos.rol == 'ADMIN'">
             <v-list-item-icon class="white--text">
               <v-icon color="white">mdi-account</v-icon>
             </v-list-item-icon>
   
-            <v-list-item-title class="white--text">holders</v-list-item-title>
+            <v-list-item-title class="white--text">Usuarios</v-list-item-title>
           </v-list-item>
   
-          <v-list-item to="/favoritos">
+          <v-list-item to="/configuracion" v-if="$store.state.datos.rol == 'ADMIN'">
             <v-list-item-icon class="white--text">
-              <v-icon color="white">mdi-heart-outline</v-icon>
+              <v-icon color="white">mdi-wrench</v-icon>
             </v-list-item-icon>
-            <v-list-item-title class="white--text">Lista de pelis favoritas</v-list-item-title>
+            <v-list-item-title class="white--text">Configuración</v-list-item-title>
           </v-list-item>
   
           <v-list-item to="/actores" v-if="$store.state.datos.rol == 'ADMIN'">

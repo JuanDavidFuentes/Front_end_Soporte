@@ -36,19 +36,19 @@
                             <v-list-item three-line>
                                 <v-list-item-content>
                                     <v-list-item-title class="text-h5 mb-1">
-                                        Crear nuevo usuario
+                                        Configuración
                                     </v-list-item-title>
                                 </v-list-item-content>
-                                <v-list-item-avatar size="100" color="grey">
+                                <v-list-item-avatar size="100" color="white">
                                     <img height=70%
-                                        src="https://i.postimg.cc/BnpC9521/add-new-user-avatar-icon-260nw-2100775648.png"
+                                        src="https://cdn-icons-png.flaticon.com/512/263/263100.png?w=826&t=st=1689725480~exp=1689726080~hmac=40e2b6a3aba4fe1449d0af9f885d3c78062412c44500e109fdf87db30e60e1f5"
                                         alt="IMG_GOOGLE_USUARIO">
                                 </v-list-item-avatar>
                             </v-list-item>
                             <v-card-actions>
-                                <v-btn color="white" outlined rounded to="/agregarusuario">
-                                    <v-icon class="mr-1" dark>mdi-account-multiple-plus</v-icon>
-                                    Agregar Usuario
+                                <v-btn color="white" outlined rounded to="/configuracion">
+                                    <v-icon class="mr-1" dark>mdi-wrench</v-icon>
+                                    Configuración
                                 </v-btn>
                             </v-card-actions>
                         </v-card>

@@ -132,7 +132,6 @@
                     <v-card>
                         <v-card-text>
                             <v-container>
-                                123123123
                                 <v-row class="mt-5">
                                     <v-col cols="12" sm="6">
                                         <v-text-field v-model="nombre" label="Nombres*" required filled
@@ -143,7 +142,7 @@
                                             rounded></v-text-field>
                                     </v-col>
                                     <v-col cols="12" class="mt-n7">
-                                        <v-text-field v-model="documento" label="Documento*" required filled
+                                        <v-text-field v-model="documento" label="Documento" required filled disabled
                                             rounded></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" class="mt-n7">
@@ -155,7 +154,7 @@
                                             rounded></v-text-field>
                                     </v-col>
                                     <v-col cols="12" class="mt-n7">
-                                        <v-text-field v-model="correo" label="Email*" required filled
+                                        <v-text-field v-model="correo" label="Email" required filled disabled
                                             rounded></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" class="mt-n7">
@@ -179,8 +178,8 @@
                             <v-btn color="red darken-1" rounded text @click="cancelar()">
                                 Cancelar
                             </v-btn>
-                            <v-btn color="green darken-1" rounded text @click="guardar()">
-                                Crear
+                            <v-btn color="green darken-1" rounded text @click="editar()"> 
+                                Guardar
                             </v-btn>
                         </v-card-actions>
                     </v-card>
@@ -193,7 +192,7 @@
 import axios from "axios";
 
 export default {
-    name: 'PageFooter',
+    name: 'PageUsuario',
     data: () => ({
         dialog: false,
         dialog2: false,
@@ -237,9 +236,7 @@ export default {
             axios
                 .get(`/usuarios`, header)
                 .then((response) => {
-                    console.log(response);
                     this.Usuarios = response.data.usuarios;
-
                 })
                 .catch((error) => {
                     console.log(error);
@@ -322,7 +319,7 @@ export default {
                         icon: "success",
                         title: "Datos Del Usuario actualizados correctamente",
                         showConfirmButton: false,
-                        timer: 1500,
+                        timer: 2200,
                     });
                     this.nombre = ""
                     this.apellido = ""
@@ -332,11 +329,18 @@ export default {
                     this.correo = ""
                     this.password = ""
                     this.selecionadoRol = ""
-                    this.dialog = false;
+                    this.dialog2 = false;
                     this.usuarios();
                 })
                 .catch((error) => {
                     console.log(error);
+                    this.$swal.fire({
+                        position: "top-end",
+                        icon: "error",
+                        title: error.response.data.errores.errors[0].msg,
+                        showConfirmButton: false,
+                        timer: 2000,
+                    });
                 });
         },
         cancelar() {
@@ -366,7 +370,6 @@ export default {
                 axios
                     .put(`/usuarios/desactivar/${id}`, {}, header)
                     .then((response) => {
-                        console.log(response);
                         this.$swal.fire({
                             position: "top-end",
                             icon: "success",
@@ -394,7 +397,6 @@ export default {
             axios
                 .put(`/usuarios/activar/${id}`, {}, header)
                 .then((response) => {
-                    console.log(response);
                     this.$swal.fire({
                         position: "top-end",
                         icon: "success",
