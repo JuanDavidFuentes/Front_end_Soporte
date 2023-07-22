@@ -9,7 +9,7 @@
                             <v-list-item three-line>
                                 <v-list-item-content>
                                     <v-list-item-title class="text-h5 mb-1">
-                                        Agregar <br>Ciudades
+                                        Crear <br>Ciudades
                                     </v-list-item-title>
                                 </v-list-item-content>
                                 <v-list-item-avatar size="100" color="white">
@@ -36,7 +36,7 @@
                             <v-list-item three-line>
                                 <v-list-item-content>
                                     <v-list-item-title class="text-h5 mb-1">
-                                        Agregar<br> Empresas
+                                        Crear<br> Empresas
                                     </v-list-item-title>
                                 </v-list-item-content>
                                 <v-list-item-avatar size="100" color="white">
@@ -48,7 +48,7 @@
                             <v-card-actions>
                                 <v-btn color="white" outlined rounded to="/empresas">
                                     <v-icon class="mr-1" dark>mdi-clipboard-account</v-icon>
-                                    Agregar empresas
+                                    empresas
                                 </v-btn>
                             </v-card-actions>
                         </v-card>

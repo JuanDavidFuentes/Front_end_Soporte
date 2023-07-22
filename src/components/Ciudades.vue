@@ -137,9 +137,7 @@ export default {
         listar() {
             axios.get(`/ciudades/CiudadDepartamento`)
                 .then((response) => {
-                    console.log(response);
                     this.ciudades = response.data.ciudad
-                    console.log(this.ciudades);
                 })
                 .catch((error) => {
                     console.log(error);
