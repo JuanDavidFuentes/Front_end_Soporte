@@ -1,6 +1,23 @@
 <template>
     <v-container fluid>
-        <div>
+        <v-row v-if="this.$store.state.token === ''">
+            <v-col cols="12" class="mb-16 box2">
+                <v-row>
+                    <v-col cols="12" class="d-flex justify-center">
+                        <img height="450"
+                            src="https://cdn.dribbble.com/users/272763/screenshots/4576659/media/e7b35df88e9ab2a2ec158aaad703a7e9.gif" />
+                    </v-col>
+                </v-row>
+                <center style="margin: 5vw;">
+                    <h1 style="    color: var(--border); font-size: 2em;">Su sesión a caducado porfavor inicie sesión
+                        nuevamente!</h1>
+                    <p>
+                        <v-btn rounded color="black" @click="volver()" dark>Iniciar sesión</v-btn>
+                    </p>
+                </center>
+            </v-col>
+        </v-row>
+        <div v-else>
             <div class="mt-16">
                 <v-card>
                     <v-card-title>
@@ -63,129 +80,131 @@
                     </v-data-table>
                 </v-card>
             </div>
+            <!--Dialog crear Usuario-->
+            <template>
+                <v-row justify="center">
+                    <v-dialog v-model="dialog" persistent max-width="800px">
+                        <v-card>
+                            <v-card-text>
+                                <v-container>
+                                    <v-row class="mt-5">
+                                        <v-col cols="12" sm="6">
+                                            <v-text-field v-model="nombre" label="Nombres*" required filled
+                                                rounded></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6">
+                                            <v-text-field v-model="apellido" label="Apellidos*" required filled
+                                                rounded></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" class="mt-n7">
+                                            <v-text-field v-model="documento" label="Documento*" required filled
+                                                rounded></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" class="mt-n7">
+                                            <v-text-field v-model="telefono" label="Telefono*" required filled
+                                                rounded></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" class="mt-n7">
+                                            <v-text-field v-model="direccion" label="Direccion*" required filled
+                                                rounded></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" class="mt-n7">
+                                            <v-text-field v-model="correo" label="Email*" required filled
+                                                rounded></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" class="mt-n7">
+                                            <v-text-field v-model="password" label="Contraseña*"
+                                                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                                                :rules="[rules.required, rules.min]" :type="show ? 'text' : 'password'"
+                                                hint="Al menos 8 carácteres" @click:append="show = !show" filled rounded
+                                                dense>
+                                            </v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" class="mt-n7">
+                                            <v-select v-model="selecionadoRol" :items="rolPersona" dense filled rounded
+                                                label="Rol">
+                                            </v-select>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                                <small class="green--text">*Indica que el campo es obligatorio</small>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="red darken-1" rounded text @click="cancelar()">
+                                    Cancelar
+                                </v-btn>
+                                <v-btn color="green darken-1" rounded text @click="guardar()">
+                                    Crear
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                </v-row>
+            </template>
+            <!--Dialog editar usuario-->
+            <template>
+                <v-row justify="center">
+                    <v-dialog v-model="dialog2" persistent max-width="800px">
+                        <v-card>
+                            <v-card-text>
+                                <v-container>
+                                    <v-row class="mt-5">
+                                        <v-col cols="12" sm="6">
+                                            <v-text-field v-model="nombre" label="Nombres*" required filled
+                                                rounded></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6">
+                                            <v-text-field v-model="apellido" label="Apellidos*" required filled
+                                                rounded></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" class="mt-n7">
+                                            <v-text-field v-model="documento" label="Documento" required filled disabled
+                                                rounded></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" class="mt-n7">
+                                            <v-text-field v-model="telefono" label="Telefono*" required filled
+                                                rounded></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" class="mt-n7">
+                                            <v-text-field v-model="direccion" label="Direccion*" required filled
+                                                rounded></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" class="mt-n7">
+                                            <v-text-field v-model="correo" label="Email" required filled disabled
+                                                rounded></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" class="mt-n7">
+                                            <v-text-field v-model="password" label="Contraseña*"
+                                                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                                                :rules="[rules.required, rules.min]" :type="show ? 'text' : 'password'"
+                                                hint="Al menos 8 carácteres" @click:append="show = !show" filled rounded
+                                                dense>
+                                            </v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" class="mt-n7">
+                                            <v-select v-model="selecionadoRol" :items="rolPersona" dense filled rounded
+                                                label="Rol">
+                                            </v-select>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                                <small class="green--text">*Indica que el campo es obligatorio</small>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="red darken-1" rounded text @click="cancelar()">
+                                    Cancelar
+                                </v-btn>
+                                <v-btn color="green darken-1" rounded text @click="editar()">
+                                    Guardar
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                </v-row>
+            </template>
         </div>
-        <!--Dialog crear Usuario-->
-        <template>
-            <v-row justify="center">
-                <v-dialog v-model="dialog" persistent max-width="800px">
-                    <v-card>
-                        <v-card-text>
-                            <v-container>
-                                <v-row class="mt-5">
-                                    <v-col cols="12" sm="6">
-                                        <v-text-field v-model="nombre" label="Nombres*" required filled
-                                            rounded></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6">
-                                        <v-text-field v-model="apellido" label="Apellidos*" required filled
-                                            rounded></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" class="mt-n7">
-                                        <v-text-field v-model="documento" label="Documento*" required filled
-                                            rounded></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" class="mt-n7">
-                                        <v-text-field v-model="telefono" label="Telefono*" required filled
-                                            rounded></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" class="mt-n7">
-                                        <v-text-field v-model="direccion" label="Direccion*" required filled
-                                            rounded></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" class="mt-n7">
-                                        <v-text-field v-model="correo" label="Email*" required filled
-                                            rounded></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" class="mt-n7">
-                                        <v-text-field v-model="password" label="Contraseña*"
-                                            :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                                            :rules="[rules.required, rules.min]" :type="show ? 'text' : 'password'"
-                                            hint="Al menos 8 carácteres" @click:append="show = !show" filled rounded dense>
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" class="mt-n7">
-                                        <v-select v-model="selecionadoRol" :items="rolPersona" dense filled rounded
-                                            label="Rol">
-                                        </v-select>
-                                    </v-col>
-                                </v-row>
-                            </v-container>
-                            <small class="green--text">*Indica que el campo es obligatorio</small>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="red darken-1" rounded text @click="cancelar()">
-                                Cancelar
-                            </v-btn>
-                            <v-btn color="green darken-1" rounded text @click="guardar()">
-                                Crear
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-            </v-row>
-        </template>
-        <!--Dialog editar usuario-->
-        <template>
-            <v-row justify="center">
-                <v-dialog v-model="dialog2" persistent max-width="800px">
-                    <v-card>
-                        <v-card-text>
-                            <v-container>
-                                <v-row class="mt-5">
-                                    <v-col cols="12" sm="6">
-                                        <v-text-field v-model="nombre" label="Nombres*" required filled
-                                            rounded></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6">
-                                        <v-text-field v-model="apellido" label="Apellidos*" required filled
-                                            rounded></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" class="mt-n7">
-                                        <v-text-field v-model="documento" label="Documento" required filled disabled
-                                            rounded></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" class="mt-n7">
-                                        <v-text-field v-model="telefono" label="Telefono*" required filled
-                                            rounded></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" class="mt-n7">
-                                        <v-text-field v-model="direccion" label="Direccion*" required filled
-                                            rounded></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" class="mt-n7">
-                                        <v-text-field v-model="correo" label="Email" required filled disabled
-                                            rounded></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" class="mt-n7">
-                                        <v-text-field v-model="password" label="Contraseña*"
-                                            :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                                            :rules="[rules.required, rules.min]" :type="show ? 'text' : 'password'"
-                                            hint="Al menos 8 carácteres" @click:append="show = !show" filled rounded dense>
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" class="mt-n7">
-                                        <v-select v-model="selecionadoRol" :items="rolPersona" dense filled rounded
-                                            label="Rol">
-                                        </v-select>
-                                    </v-col>
-                                </v-row>
-                            </v-container>
-                            <small class="green--text">*Indica que el campo es obligatorio</small>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="red darken-1" rounded text @click="cancelar()">
-                                Cancelar
-                            </v-btn>
-                            <v-btn color="green darken-1" rounded text @click="editar()"> 
-                                Guardar
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-            </v-row>
-        </template>
     </v-container>
 </template> 
 <script>
@@ -410,6 +429,9 @@ export default {
                     console.log(error);
                 });
         },
+        volver() {
+            this.$router.push("/")
+        }
     },
     created() {
         this.usuarios()

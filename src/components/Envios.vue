@@ -1,6 +1,23 @@
 <template>
-    <v-container>
-        <v-row class="mt-16 mb-16">
+    <v-container fluid>
+        <v-row v-if="this.$store.state.token === ''">
+            <v-col cols="12" class="mb-16 box2">
+                <v-row>
+                    <v-col cols="12" class="d-flex justify-center">
+                        <img height="450"
+                            src="https://cdn.dribbble.com/users/272763/screenshots/4576659/media/e7b35df88e9ab2a2ec158aaad703a7e9.gif" />
+                    </v-col>
+                </v-row>
+                <center style="margin: 5vw;">
+                    <h1 style="    color: var(--border); font-size: 2em;">Su sesión a caducado porfavor inicie sesión
+                        nuevamente!</h1>
+                    <p>
+                        <v-btn rounded color="black" @click="volver()" dark>Iniciar sesión</v-btn>
+                    </p>
+                </center>
+            </v-col>
+        </v-row>
+        <v-row v-else class="mt-16 mb-16">
             <v-col cols="12">
                 <template>
                     <v-card>
@@ -27,6 +44,10 @@
                                     </v-text-field>
                                 </v-card-title>
                                 <v-data-table :headers="headers" :items="envios" :search="search">
+                                    <template v-slot:[`item.img`]="{ item }">
+                                        <v-img  max-height="200" max-width="100"
+                                            :src= item.imgGuia ></v-img>
+                                    </template>
                                     <template v-slot:[`item.estado`]="{ item }">
                                         <span class="red--text" v-if="item.estado === 1"> Enviado</span>
                                         <span class="green--text" v-else>Recibido</span>
@@ -72,7 +93,6 @@
                     </v-card>
                 </template>
             </v-col>
-            <v-btn @click="dialog4 = true"></v-btn>
         </v-row>
         <!--Dialog crear Envios-->
         <v-dialog v-model="dialog2" persistent max-width="1500px">
@@ -172,7 +192,7 @@
                                     rows="1" row-height="15" required></v-textarea>
                             </v-col>
                             <v-col cols="12" class="mt-n7">
-                                <v-btn block rounded large dark elevation="10" color="black" @click="dialog = true">
+                                <v-btn block rounded large dark elevation="10" color="black" @click="editarIMG()">
                                     Editar imagen de la guía
                                 </v-btn>
                             </v-col>
@@ -196,7 +216,8 @@
             <v-card>
                 <v-card-text>
                     <v-container>
-                        <h2>¿Quieres agregar la imagen de la guía?</h2>
+                        <h2 v-if="imgVariante === 1">¿Quieres agregar la imagen de la guía?</h2>
+                        <h2 v-else>¿Quieres editar la imagen de la guía?</h2>
                         <v-col cols="12">
                             <div class="container-input">
                                 <input type="file" name="file-5" id="file-5" @change="subir" class="inputfile inputfile-5"
@@ -210,7 +231,7 @@
                                             </path>
                                         </svg>
                                     </figure>
-                                    <span class="iborrainputfile">Seleccionar archivo</span>
+                                    <span class="iborrainputfile">{{ imgGuia.name }}</span>
                                 </label>
                             </div>
                         </v-col>
@@ -218,11 +239,14 @@
                 </v-card-text>
                 <v-card-actions class="mt-n8">
                     <v-spacer></v-spacer>
-                    <v-btn color="red darken-1" rounded text @click="dialog4 = false">
+                    <v-btn color="red darken-1" rounded text @click="dialog4 = false, imgVariante = 1">
                         Cancelar
                     </v-btn>
-                    <v-btn color="green darken-1" rounded text @click="guardarIMG()">
+                    <v-btn v-if="imgVariante === 1" color="green darken-1" rounded text @click="guardarIMG()">
                         Guardar imagen
+                    </v-btn>
+                    <v-btn v-else color="green darken-1" rounded text @click="guardarIMG()">
+                        Editar imagen
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -350,6 +374,7 @@ export default {
             af: '',
             estadoMaquina: "1",
             variante: 1,
+            imgVariante: 1,
             //headers
             //Envios
             headers: [
@@ -378,11 +403,12 @@ export default {
                     align: 'start',
                     value: 'motivoEnvio',
                 },
-                // {
-                //     text: 'IMG-Guia',
-                //     align: 'start',
-                //     value: 'opciones',
-                // },
+                {
+                    text: 'IMG-Guia',
+                    align: 'start',
+                    sortable: false,
+                    value: 'img',
+                },
                 {
                     text: 'Estado',
                     align: 'start',
@@ -391,6 +417,7 @@ export default {
                 {
                     text: 'Opciones',
                     align: 'start',
+                    sortable: false,
                     value: 'opciones',
                 }
             ],
@@ -527,6 +554,9 @@ export default {
                         this.aparecer = 1
                         this.nombre = ""
                         this.descripcion = ""
+                        this.dialog4 = false
+                        this.imgVariante = 1
+                        this.listar()
                         console.log(response.data.url);
                     })
                     .catch(error => {
@@ -536,9 +566,13 @@ export default {
                 this.$swal({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Inserta una foto del actor!',
+                    text: 'Inserta la imagen de la guía!',
                 })
             }
+        },
+        editarIMG() {
+            this.dialog4 = true
+            this.imgVariante = 2
         },
         cancelarEnvio() {
             this.dialog2 = false
@@ -693,6 +727,9 @@ export default {
                     console.log(error);
                 });
         },
+        volver() {
+            this.$router.push("/")
+        }
     },
     created() {
         this.listar();

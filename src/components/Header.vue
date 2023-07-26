@@ -55,27 +55,12 @@
             <v-list-item-title class="white--text">Configuración</v-list-item-title>
           </v-list-item>
   
-          <v-list-item to="/actores" v-if="$store.state.datos.rol == 'ADMIN'">
+          <v-list-item to="/envios">
             <v-list-item-icon class="white--text">
-              <v-icon color="white">mdi-sword</v-icon>
+              <v-icon color="white">mdi-file-check</v-icon>
             </v-list-item-icon>
-            <v-list-item-title class="white--text">Agregar actor</v-list-item-title>
+            <v-list-item-title class="white--text">Envíos</v-list-item-title>
           </v-list-item>
-  
-          <v-list-item to="/peliculas"  v-if="$store.state.datos.rol == 'ADMIN'">
-            <v-list-item-icon class="white--text">
-              <v-icon color="white">mdi-arrow-up-bold</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title class="white--text">Agregar pelis</v-list-item-title>
-          </v-list-item>
-  
-          <v-list-item to="/listarActores">
-            <v-list-item-icon class="white--text">
-              <v-icon color="white">mdi-sword</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title class="white--text">Actores</v-list-item-title>
-          </v-list-item>
-  
         </v-list>
       </v-navigation-drawer>
     </div>

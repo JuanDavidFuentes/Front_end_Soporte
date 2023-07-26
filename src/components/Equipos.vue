@@ -1,6 +1,23 @@
 <template>
-    <div>
-        <v-row class="mt-16 mb-16">
+    <v-container fluid>
+        <v-row v-if="this.$store.state.token === ''">
+            <v-col cols="12" class="mb-16 box2">
+                <v-row>
+                    <v-col cols="12" class="d-flex justify-center">
+                        <img height="450"
+                            src="https://cdn.dribbble.com/users/272763/screenshots/4576659/media/e7b35df88e9ab2a2ec158aaad703a7e9.gif" />
+                    </v-col>
+                </v-row>
+                <center style="margin: 5vw;">
+                    <h1 style="    color: var(--border); font-size: 2em;">Su sesión a caducado porfavor inicie sesión
+                        nuevamente!</h1>
+                    <p>
+                        <v-btn rounded color="black" @click="volver()" dark>Iniciar sesión</v-btn>
+                    </p>
+                </center>
+            </v-col>
+        </v-row>
+        <v-row v-else class="mt-16 mb-16">
             <v-col cols="12">
                 <template>
                     <v-card>
@@ -146,7 +163,7 @@
                                 </v-radio-group>
                             </v-col>
                         </v-row>
-                    </v-container> 
+                    </v-container>
                     <small class="green--text">* indica campo requerido</small>
                 </v-card-text>
                 <v-card-actions>
@@ -160,7 +177,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-    </div>
+    </v-container>
 </template>
 <script>
 import axios from 'axios';
@@ -271,7 +288,7 @@ export default {
             this.nombre = item.nombre;
             this.serial = item.serial;
             this.af = item.af;
-            this.estadoMaquina = item.estadoMaquina.toString();      
+            this.estadoMaquina = item.estadoMaquina.toString();
         },
         editar() {
             let header = { headers: { "token": this.$store.state.token } }
@@ -386,6 +403,9 @@ export default {
                     }
                 });
         },
+        volver() {
+            this.$router.push("/")
+        }
     },
     created() {
         this.listar();

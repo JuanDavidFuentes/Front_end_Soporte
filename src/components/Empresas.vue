@@ -1,91 +1,110 @@
 <template>
-    <v-container>
-        <v-row class="mt-16 mb-16">
-            <v-col cols="12">
-                <template>
-                    <v-card>
-                        <template>
-                            <v-card>
-                                <v-card-title>
-                                    Empresas
-                                    <v-spacer></v-spacer>
-                                    <div>
-                                        <v-tooltip bottom>
-                                            <template v-slot:activator="{ on, attrs }">
-                                                <v-icon color="green" rounded v-bind="attrs" v-on="on"
-                                                    @click="dialog2 = true">
-                                                    mdi-plus-circle
-                                                </v-icon>
-                                                Añadir una empresa
-                                            </template>
-                                            <span>Añadir Empresa</span>
-                                        </v-tooltip>
-                                    </div>
-                                    <v-spacer></v-spacer>
-                                    <v-text-field v-model="search" append-icon="mdi-magnify" label="Buscar empresa"
-                                        single-line hide-details>
-                                    </v-text-field>
-                                </v-card-title>
-                                <v-data-table :headers="headers" :items="empresas" :search="search">
-                                    <template v-slot:[`item.estado`]="{ item }">
-                                        <span class="green--text" v-if="item.estado === 1"> Activo</span>
-                                        <span class="red--text" v-else>Inactivo</span>
-                                    </template>
-                                    <template v-slot:[`item.opciones`]="{ item }">
-                                        <span v-if="item.estado === 1">
-                                            <v-tooltip bottom>
-                                                <template v-slot:activator="{ on, attrs }">
-                                                    <v-icon color="red" rounded v-bind="attrs" v-on="on"
-                                                        @click="desactivar(item._id)">
-                                                        mdi-shield-off
-                                                    </v-icon>
-                                                </template>
-                                                <span>Inactivar</span>
-                                            </v-tooltip>
-                                        </span>
-                                        <span v-else>
-                                            <v-tooltip bottom>
-                                                <template v-slot:activator="{ on, attrs }">
-                                                    <v-icon color="success" rounded v-bind="attrs" v-on="on"
-                                                        @click="activar(item._id)">
-                                                        mdi-shield-check-outline
-                                                    </v-icon>
-                                                </template>
-                                                <span>Activar</span>
-                                            </v-tooltip>
-                                        </span>
-                                    </template>
-                                </v-data-table>
-                            </v-card>
-                        </template>
-                    </v-card>
-                </template>
+    <v-container fluid>
+        <v-row v-if="this.$store.state.token === ''">
+            <v-col cols="12" class="mb-16 box2">
+                <v-row>
+                    <v-col cols="12" class="d-flex justify-center">
+                        <img height="450"
+                            src="https://cdn.dribbble.com/users/272763/screenshots/4576659/media/e7b35df88e9ab2a2ec158aaad703a7e9.gif" />
+                    </v-col>
+                </v-row>
+                <center style="margin: 5vw;">
+                    <h1 style="    color: var(--border); font-size: 2em;">Su sesión a caducado porfavor inicie sesión
+                        nuevamente!</h1>
+                    <p>
+                        <v-btn rounded color="black" @click="volver()" dark>Iniciar sesión</v-btn>
+                    </p>
+                </center>
             </v-col>
         </v-row>
-        <!--Dialog agregar empresas-->
-        <v-dialog v-model="dialog2" persistent max-width="1000px">
-            <v-card>
-                <v-card-text>
-                    <v-container>
-                        <v-row class="mt-5">
-                            <v-col cols="12">
-                                <v-text-field label="Nombre de la empresa de envios*" v-model="nombre" rounded filled dense
-                                    required></v-text-field>
-                            </v-col>
-                        </v-row>
-                    </v-container>
-                </v-card-text>
-                <v-card-actions class="mt-n7">
-                    <v-spacer></v-spacer>
-                    <v-btn color="red darken-1" rounded text @click="dialog2 = false">
-                        Cancelar
-                    </v-btn>
-                    <v-btn color="green darken-1" rounded text @click="crearEmpresa()">
-                        Guardar
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+        <div v-else>
+            <v-row class="mt-16 mb-16">
+                <v-col cols="12">
+                    <template>
+                        <v-card>
+                            <template>
+                                <v-card>
+                                    <v-card-title>
+                                        Empresas
+                                        <v-spacer></v-spacer>
+                                        <div>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-icon color="green" rounded v-bind="attrs" v-on="on"
+                                                        @click="dialog2 = true">
+                                                        mdi-plus-circle
+                                                    </v-icon>
+                                                    Añadir una empresa
+                                                </template>
+                                                <span>Añadir Empresa</span>
+                                            </v-tooltip>
+                                        </div>
+                                        <v-spacer></v-spacer>
+                                        <v-text-field v-model="search" append-icon="mdi-magnify" label="Buscar empresa"
+                                            single-line hide-details>
+                                        </v-text-field>
+                                    </v-card-title>
+                                    <v-data-table :headers="headers" :items="empresas" :search="search">
+                                        <template v-slot:[`item.estado`]="{ item }">
+                                            <span class="green--text" v-if="item.estado === 1"> Activo</span>
+                                            <span class="red--text" v-else>Inactivo</span>
+                                        </template>
+                                        <template v-slot:[`item.opciones`]="{ item }">
+                                            <span v-if="item.estado === 1">
+                                                <v-tooltip bottom>
+                                                    <template v-slot:activator="{ on, attrs }">
+                                                        <v-icon color="red" rounded v-bind="attrs" v-on="on"
+                                                            @click="desactivar(item._id)">
+                                                            mdi-shield-off
+                                                        </v-icon>
+                                                    </template>
+                                                    <span>Inactivar</span>
+                                                </v-tooltip>
+                                            </span>
+                                            <span v-else>
+                                                <v-tooltip bottom>
+                                                    <template v-slot:activator="{ on, attrs }">
+                                                        <v-icon color="success" rounded v-bind="attrs" v-on="on"
+                                                            @click="activar(item._id)">
+                                                            mdi-shield-check-outline
+                                                        </v-icon>
+                                                    </template>
+                                                    <span>Activar</span>
+                                                </v-tooltip>
+                                            </span>
+                                        </template>
+                                    </v-data-table>
+                                </v-card>
+                            </template>
+                        </v-card>
+                    </template>
+                </v-col>
+            </v-row>
+            <!--Dialog agregar empresas-->
+            <v-dialog v-model="dialog2" persistent max-width="1000px">
+                <v-card>
+                    <v-card-text>
+                        <v-container>
+                            <v-row class="mt-5">
+                                <v-col cols="12">
+                                    <v-text-field label="Nombre de la empresa de envios*" v-model="nombre" rounded filled
+                                        dense required></v-text-field>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions class="mt-n7">
+                        <v-spacer></v-spacer>
+                        <v-btn color="red darken-1" rounded text @click="dialog2 = false">
+                            Cancelar
+                        </v-btn>
+                        <v-btn color="green darken-1" rounded text @click="crearEmpresa()">
+                            Guardar
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </div>
     </v-container>
 </template>
 <script>
@@ -235,6 +254,9 @@ export default {
                     }
                 });
         },
+        volver() {
+            this.$router.push("/")
+        }
     },
     created() {
         this.listar()
