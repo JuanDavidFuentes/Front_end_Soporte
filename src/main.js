@@ -7,8 +7,8 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import {store} from './store/store';
 import {routes} from './routes/routes.js';
 import axios from 'axios'
-
-axios.defaults.baseURL = 'http://localhost:4000/api';
+// https://soporte-6eul.onrender.com http://localhost:4000
+axios.defaults.baseURL = 'https://soporte-6eul.onrender.com/api';
 
 Vue.use(VueRouter)
 Vue.use(VueSweetalert2);
