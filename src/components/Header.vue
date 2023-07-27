@@ -7,7 +7,7 @@
         <v-toolbar-title dark>Soporte la perla</v-toolbar-title>
         <v-spacer></v-spacer>
   
-        <v-btn @click="salir()" class="white black--text">
+        <v-btn @click="salir()" v-if="$store.state.token !== ''" class="white black--text">
           salir
           <v-icon>mdi-door-open</v-icon>
         </v-btn>

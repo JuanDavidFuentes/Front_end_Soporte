@@ -61,18 +61,18 @@
                                                         mdi-check-circle
                                                     </v-icon>
                                                 </template>
-                                                <span>Marcar como <span class="red--text">"Recibido"</span></span>
+                                                <span>Marcar como <span class="green--text">"Recibido"</span></span>
                                             </v-tooltip>
                                         </span>
                                         <span v-else>
                                             <v-tooltip bottom>
                                                 <template v-slot:activator="{ on, attrs }">
-                                                    <v-icon color="success" rounded v-bind="attrs" v-on="on"
+                                                    <v-icon color="red" rounded v-bind="attrs" v-on="on"
                                                         @click="activar(item._id)">
                                                         mdi-close-circle
                                                     </v-icon>
                                                 </template>
-                                                <span>Marcar como <span class="green--text">"Recibido"</span></span>
+                                                <span>Marcar como <span class="red--text">"Enviado"</span></span>
                                             </v-tooltip>
                                         </span>
                                         <span>
@@ -641,8 +641,75 @@ export default {
             this.numeroGuia = ""
             this.motivoEnvio = ""
         },
-        cancelarIMG() {
-
+        desactivar(id) {
+            let header = { headers: { token: this.$store.state.token } };
+            axios
+                .put(`/envios/desactivar/${id}`, {}, header)
+                .then((response) => {
+                    console.log(response);
+                    this.$swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Envío en estado 'Recibido'",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    this.listar();
+                })
+                .catch((error) => {
+                    if (error.response.data.msg === "No hay token en la peticion") {
+                        this.$swal.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: "Iniciado sesión nuevamente",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    } else {
+                        this.$swal.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: error.response.data.errores.errors[0].msg,
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    }
+                });
+        },
+        activar(id) {
+            let header = { headers: { token: this.$store.state.token } };
+            axios
+                .put(`/envios/activar/${id}`, {}, header)
+                .then((response) => {
+                    console.log(response);
+                    this.$swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Envío en estado 'Enviado'",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    this.listar();
+                })
+                .catch((error) => {
+                    if (error.response.data.msg === "No hay token en la peticion") {
+                        this.$swal.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: "Iniciado sesión nuevamente",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    } else {
+                        this.$swal.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: error.response.data.errores.errors[0].msg,
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    }
+                });
         },
         //Equipos
         listarEquipos() {
